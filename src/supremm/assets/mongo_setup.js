@@ -430,6 +430,11 @@ var summarydef = {
             "documentation": "The CpuCategories plugin uses CPU utilization metrics to categorize a job as good, pinned, unpinned, or low. A job is good if every core is heavily utilized, and a job is low if the cores are barely utilized or not at all. A pinned job consists of a scenario where a subset of the cores does most of the work, while an unpinned job is when the work is spread unevenly across many cores.",
             "type": "",
             "unit": ""
+        },
+        "cgroupmemcategories": {
+            "documentation": "The CgroupMemCategories plugin uses the cgroup memory usage metric to categorize a job as constant, increasing, decreasing, or inconsistent. A job is constant if the memory usage stays approximately the same, increasing if the memory usage increases overall, decreasing if the memory usage decreases overall, or inconsistent if the memory usage does not fall under the previous three categories.",
+            "type": "",
+            "unit": ""
         }
     } 
 };
