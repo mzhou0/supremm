@@ -31,3 +31,14 @@ EOF
 [[ $count -eq 6 ]]
 
 pytest tests/integration_tests/integration_plugin_api.py
+<<<<<<< HEAD
+=======
+
+match=$(python src/supremm/supremm_testharness.py -i CpuCategories tests/integration_tests/5894431-1622570028/ | grep -q "GOOD"; echo $?)
+
+[[ $match -eq 0 ]]
+
+match=$(python src/supremm/supremm_testharness.py -i CgroupMemCategories --job-id=5894431 --acct-uid=545487 tests/integration_tests/5894431-1622570028/ | grep -q "INCONSISTENT"; echo $?)
+
+[[ $match -eq 0 ]]
+>>>>>>> a4cae72... Add integration test for CgroupMemCategories plugin
