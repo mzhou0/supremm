@@ -22,14 +22,16 @@ TIMESERIES_VERSION = 4
 
 class ArchiveMeta(NodeMetadata):
     """ container for achive metadata """
-    def __init__(self, nodename, nodeidx, archivedata):
+    def __init__(self, nodename, nodeidx, archivedata, hyperthreadedratio):
         self._nodename = nodename
         self._nodeidx = nodeidx
         self._archivedata = archivedata
+        self._hyperthreadedratio = hyperthreadedratio
 
     nodename = property(lambda self: self._nodename)
     nodeindex = property(lambda self: self._nodeidx)
     archive = property(lambda self: self._archivedata)
+    hyperthreadedratio = property(lambda self: self._hyperthreadedratio)
 
 class Summarize(object):
     """
@@ -47,6 +49,11 @@ class Summarize(object):
         self.start = time.time()
         self.archives_processed = 0
         self.fail_fast = fail_fast
+        self.hyperthreadedratio = None
+        for resource in config._config['resources']:
+            if 'hyperthreaded_ratio' in config._config['resources'][resource]:
+                self.hyperthreadedratio = config._config['resources'][resource]['hyperthreaded_ratio']
+                break
 
         self.rangechange = RangeChange(config)
 
@@ -62,6 +69,7 @@ class Summarize(object):
     def process(self):
         """ Main entry point. All archives are processed """
         success = 0
+        print "hello"
         self.archives_processed = 0
 
         for nodename, nodeidx, archive in self.job.nodearchives():
@@ -362,7 +370,7 @@ class Summarize(object):
         # pmFetch for the different contexts. This version runs all the pmFetches for each analytic
         # in turn.
         context = pmapi.pmContext(c_pmapi.PM_CONTEXT_ARCHIVE, archive)
-        mdata = ArchiveMeta(nodename, nodeidx, context.pmGetArchiveLabel())
+        mdata = ArchiveMeta(nodename, nodeidx, context.pmGetArchiveLabel(), self.hyperthreadedratio)
 
         for preproc in self.preprocs:
             context.pmSetMode(c_pmapi.PM_MODE_FORW, mdata.archive.start, 0)
